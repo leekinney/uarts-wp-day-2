@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>UArts WordPress Workshop | Day 2</title>
+
+		<meta name="description" content="slides for day one of my University of the Arts WordPress Workshop">
+		<meta name="author" content="LeeAnn Kinney">
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/beige.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>WordPress Workshop</h1>
+					<h2>Day Two</h2>
+					<h3><a href='http://leekinney.github.io/uarts-wp-day-2/'>Link to slides</a></h3>
+					<p>
+						<small>With <a href="http://leeannkinney.com/">LeeAnn Kinney</a> / <a href="mailto:leeann.a.kinney@gmail.com">leeann.a.kinney@gmail.com</a></small>
+					</p>
+				</section>
+
+				<section>
+					<h2>Schedule/Time frame for Day 1</h2>
+					<ul>
+						<li>Quick review of last week</li>
+						<li>Questions from last week?</li>
+						<li>Theme structure</li>
+						<li><b>Coffee break</b> apx 15 min</li>
+						<li>Building Child Themes</li>
+						<li><b>Break for Lunch</b> apx 30 - 45 min</li>
+						<li>Building custom templates</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Review last week</h2>
+				</section>
+
+				<section>
+					<h2>Questions from last week?</h2>
+				</section>
+
+				<section>
+					<h2>Themes</h2>
+					<ul>
+						<li class="fragment">Determine how the site looks</li>
+						<li class="fragment">Adds functionality</li>
+						<li class="fragment">Free vs. Paid</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>WordPress file structure</h2>
+					<ul>
+						<li><b>wp-admin</b> &amp; <b>wp-includes</b>: WP core files *do not touch*</li>
+						<li><b>wp-content</b>: Theme, plugin & uploaded files (media, etc.)</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Editing themes</h2>
+					<p>Never edit the WP core files; things can easily get broken and will be overwritten with any updates.</p>
+				</section>
+
+				<section>
+					<h2>3 ways of custom theme building</h2>
+					<ul>
+						<li class="fragment">Child Themes</li>
+						<li class="fragment">Bare bones starter theme</li>
+						<li class="fragment">Custom theme from scratch</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Child theme</h2>
+					<ul>
+						<li>Allows you to overwrite certain parts of parent</li>
+						<li>Anything not specified will default to parent styles/functionality</li>
+						<li><b>Pro</b>: Easy to get started, can do a ton with just CSS changes</li>
+						<li><b>Con</b>: Some themes will not allow for a child</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Bare bones starter theme</h2>
+					<ul>
+						<li>Allows you to start with a clean slate</li>
+						<li>No need to overwrite styles</li>
+						<li><b>Pro</b>: PHP knowledge isn't necessary</li>
+						<li><b>Con</b>: Might take a little longer to get started</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Custom theme from scratch</h2>
+					<ul>
+						<li>Requires writing all files</li>
+						<li><b>Pro</b>: A completely custom theme</li>
+						<li><b>Con</b>: Requires a lot more time and knowledge of PHP; room for error</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Break?</h2>
+				</section>
+
+				<section>
+					<h2>Child themes</h2>
+					<p>With just a few lines of code we can get up and running with a child theme.</p>
+					<p>WordPress looks for files in the child theme folder first, anything it can't find, it defaults back to the parent theme.</p>
+				</section>
+
+				<section>
+					<h2>Child themes</h2>
+					<p>Child themes are a safe option because if you break anything it can be undone or deleted without effecting functionality of the site.</p>
+				</section>
+
+				<section>
+					<h2>What a child theme needs</h2>
+					<h3>One - a CSS file</h3>
+<pre>
+<code>/*
+Theme Name: Your theme name here
+Theme URI: url for the theme, if you have one
+Description: A description for your theme.
+Author: Your name here
+Author URI: Your website here
+Template: folder name of parent theme (can find this by looking at wp-content folder)
+Version: version number, start with 1 then goes up with points, <em>i.e.</em>1.1
+*/</code></pre>
+				</section>
+
+				<section>
+					<h2>What a child theme needs</h2>
+					<h3>Two - a functions.php file</h3>
+<pre>
+<code>&lt;?php
+
+add_action( 'wp_enqueue_scripts', 'theme_enqueue_styles' );
+function theme_enqueue_styles() {
+    wp_enqueue_style( 'parent-style', get_template_directory_uri() . '/style.css' );
+    wp_enqueue_style( 'child-style',
+        get_stylesheet_directory_uri() . '/style.css',
+        array('parent-style')
+    );
+}</code></pre>
+				</section>
+
+				<section>
+					<h2>What a child theme needs</h2>
+					<h3>Three - a screen shot <em>(optional)</em></h3>
+					<h4>Below is an example of a child theme missing a screen shot</h4>
+					<img src="img/child-theme-screenshot.png" alt="wordpress theme page showing a child theme with no image">
+					<p>A screen shot should be 880px by 660px and be named &ldquo;screenshot.png&rdquo;</p>
+				</section>
+
+				<section>
+					<h2>Adding your child theme</h2>
+					<ul>
+						<li>Create a folder under > wp-content > themes</li>
+						<li>Name the theme with no spaces</li>
+						<li>Example: twentyfifteen-child</li>
+						<li>Add style.css, funtion.php and screenshot.png to folder</li>
+						<li>Activate your theme through Appearance > Themes</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Let's build a child theme!</h2>
+					<p>Use your theme from last week or start fresh with one of the WordPress default themes, twentyfourteen, twentythirteen, etc.</p>
+				</section>
+
+				<section>
+					<h2>Let's build a child theme!</h2>
+					<h3>See if you can change the following</h3>
+					<ul>
+						<li>The font size of all h1 tags</li>
+						<li>Text link color</li>
+						<li>The font family of all p tags</li>
+						<li>What else?</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Changing other theme files</h2>
+					<p>Sometimes you might want to change other parts of a themes functionality, this can be done by copying the template files of the parent theme and overwriting in the child theme.</p>
+				</section>
+
+				<section>
+					<h2>More common template files include:</h2>
+					<ul>
+						<li><b>header.php</b>: The global header of the site</li>
+						<li><b>footer.php</b>: The global footer of your site (where you'll find &ldquo;Powered by WordPress&rdquo;</li>
+						<li><b>index.php</b>: This is the posts (blog) page</li>
+						<li><b>page.php</b>: Controls the static pages of the site</li>
+						<li><b>sidebar.php</b>: The sidebar widgets</li>
+						<li><b>single.php</b>: Your single posts</li>
+						<li><b><a href='https://codex.wordpress.org/Creating_an_Error_404_Page'>404.php</a></b>: Allows you to edit your 404 page</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Let's build it!</h2>
+					<p>Modify the footer.php file and remove &ldquo;Powered by WordPress&rdquo;</p>
+				</section>
+
+				<section>
+					<h2>Creating more templates</h2>
+					<ul>
+						<li>You can make additional templates in your child theme</li>
+						<li>They will show up in the template drop-down menu on page/post edit screen</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Creating a template file</h2>
+					<h3>First give it a name</h3>
+<pre>
+<code>
+&lt;?php
+/*
+Template Name: *template name goes here*
+*/
+?&gt;
+
+</code></pre>
+					<h3>Then include at least the following tags</h3>
+<pre><code>
+&lt;?php get_header(); ?&gt;
+
+&lt;?php get_footer(); ?&gt;
+
+</code></pre>
+				</section>
+
+				<section>
+					<h2>Let's build it</h2>
+					<ol>
+						<li>Copy page.php into your child theme and rename it</li>
+						<li>Save</li>
+						<li>Add template name</li>
+						<li>Adjust css</li>
+					</ol>
+					<p><em>Side note: WP adds classes to your body tag; this can be used to style pages</em></p>
+				</section>
+
+				<section>
+					<h3>Include tags</h3>
+					<p>Include tags execute the HTML &amp; PHP found in another template</p>
+					<p><a href="http://codex.wordpress.org/Include_Tags">WordPress Codex</a></p>
+				</section>
+
+				<section>
+					<h3>Function tags</h3>
+					<p>Functions defined for use in WordPress Themes</p>
+					<p><a href="http://codex.wordpress.org/Function_Reference">More from the WordPress Codex</a></p>
+<pre>
+<code>
+Copyright &copy; &lt;?php echo date('Y'); ?&gt; &lt;a href="&lt;?php echo home_url( '/' ); ?&gt;"&gt;&lt;?php bloginfo( 'name' ); ?&gt;&lt;/a&gt;
+
+</code></pre>
+				</section>
+
+				<section>
+					<h2>Conditional tags</h2>
+					<p>Displays content based on page and conditions it matches.</p>
+					<p><a href='http://codex.wordpress.org/Conditional_Tags'>More from WordPress Codex</a></p>
+<pre>
+<code>
+&lt;?php
+	if(is_front_page()){
+		echo "&lt;p&gt;*This will only show up on the home page*&lt;/p&gt;";
+	}
+?&gt;
+</code></pre>
+
+<pre>
+<code>
+&lt;?php if (is_page() ) {?&gt;
+	&lt;div class='footer-page-only'&gt;
+		&lt;h1&gt;*this will only show up on pages, not posts*&lt;/h1&gt;
+	&lt;/div&gt;
+&lt;?php } ?&gt;
+
+</code></pre>
+				</section>
+
+
+				<section>
+					<h2>Let's build it!</h2>
+					<p>Let's use some template tags to customize our themes even more.</p>
+					<p>Use at least one include tag, one function tag and one conditional tag</p>
+				</section>
+
+				<section>
+					<h2>Template hierarchy</h2>
+					<p>This is how WordPress determines which files to use on individual pages</p>
+					<img src="img/template-hierarchy.png" alt='diagram of WordPress template hierarchy'>
+				</section>
+
+				<section>
+					<h2>Child theme plugins</h2>
+					<p>Child themes can also be created via a plugin which can be handy if you don't have ftp access.</p>
+				</section>
+
+				<section>
+					<h2>Let's build it</h2>
+					<p>Let's install a child theme plugin to see the difference.</p>
+				</section>
+
+				<section>
+					<h2>Bare bones starter themes</h2>
+					<p>Starter themes are not meant to be used like parent themes. The developers have created these themes so you can hack them and make it your own.</p>
+				</section>
+
+				<section>
+					<h2>Some popular starter themes</h2>
+					<h3><a href='http://underscores.me/'>Underscores</a></h3>
+					<h4>A few highlights...</h4>
+					<ul>
+						<li>Custom 404 page</li>
+						<li>Sample custom headers</li>
+						<li>Toggle responsive navigation built in</li>
+						<li>2 sample CSS files</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Some popular starter themes</h2>
+					<h3><a href='http://themble.com/bones/'>Bones</a></h3>
+					<h4>A few highlights...</h4>
+					<ul>
+						<li>Mobile-first</li>
+						<li>Uses Sass</li>
+						<li>Custom post types &amp; custom dashboard functions preloaded</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Some popular starter themes</h2>
+					<h3><a href='http://quarktheme.com/'>Quark</a></h3>
+					<h4>A few highlights...</h4>
+					<ul>
+						<li>Based off of underscores &amp; TwentyTwelve</li>
+						<li>Default media queries built in</li>
+						<li>WooCommerce compatible</li>
+						<li>Multilingual ready</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Let's build it!</h2>
+					<p>Download a starter theme of your choice (doesn't have to be one of the 3 mentioned) and update the screenshot along with some CSS.</p>
+				</section>
+
+				<section>
+					<h2>What are some other common modifications?</h2>
+					<ul>
+						<li>Tags</li>
+						<li>Search</li>
+						<li>Categories</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2><a href='https://codex.wordpress.org/Tag_Templates'>Tag Templates</a></h2>
+					<p>After clicking on a tag link, a user is taken to a page listing those posts. There are many different ways to display these posts, controlled by the tag templates.</p>
+
+				</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
